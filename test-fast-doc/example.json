@@ -1,0 +1,127 @@
+[
+  [],
+  [
+    "@@ -2 +2 @@ import { getChangedFiles } from './fileManager.mjs'",
+    "-import { getFastDocLinks } from './lib/fast-docs-lib.mjs'",
+    "+import { getFastDocItems } from './lib/fast-docs-lib.mjs'"
+  ],
+  [
+    "@@ -5 +5 @@ import { getFastDocLinks } from './lib/fast-docs-lib.mjs'",
+    '-const fastDocLinks = await getFastDocLinks()',
+    '+const {fastDocLinks, fastDocCodeBlocks} = await getFastDocItems()'
+  ]
+]
+[ 2 ]
+[ 5 ]
+[
+  [],
+  [
+    '@@ -11 +11,74 @@ async function getChangedFiles() {',
+    '-export { getChangedFiles }',
+    '\\ No newline at end of file',
+    '+function parseSingleLineChangesToLineNumbers(singleLineChangeHunkMatches) {',
+    '+    let matches',
+    '+    for (const match of singleLineChangeHunkMatches) {',
+    '+        const [header, fromLine, toLine] = match',
+    '+        matches = [+fromLine]',
+    '+    }',
+    '+    return matches',
+    '+}',
+    '+',
+    '+function parseJustLinesAddedToLineNumbers(justLinesAddedHunkMatches) {',
+    '+    let matches',
+    '+    for (const match of justLinesAddedHunkMatches) {',
+    '+        const [header, fromLine, toLine, linesAdded] = match',
+    '+        matches = [+fromLine, +linesAdded]',
+    '+    }',
+    '+',
+    '+    const [fromLine, linesAdded] = matches',
+    '+    const lines = new Array(linesAdded)',
+    '+    for (let i = 0; i < linesAdded; i++) {',
+    '+        lines[i] = fromLine + i',
+    '+    }',
+    '+    return lines',
+    '+}',
+    '+',
+    '+async function getChangedFilesWithDiff() {',
+    "+    const { stdout, stderr } = await exec('git --no-pager diff  -U0')",
+    '+    const diffs = []',
+    '+    const diffLineRegex = /^diff .*/g',
+    '+    let currentDiff = []',
+    "+    for (const line of stdout.split('\\n')) {",
+    '+        if (diffLineRegex.test(line)) {',
+    '+            diffs.push(currentDiff)',
+    '+            currentDiff = []',
+    '+        }',
+    '+        currentDiff.push(line)',
+    '+    }',
+    '+    function formatFileDiff(diff) {',
+    '+        function formatHunk(hunk) {',
+    '+            const [header, ...lines] = hunk',
+    '+            const regexForSingleLineChange = /@@ \\-([1-9][0-9]*) \\+([1-9][0-9]*) @@/g',
+    '+            const regexForJustLinesAdded = /@@ \\-([1-9][0-9]*) \\+([1-9][0-9]*),([0-9]*) @@/g',
+    '+            const regexs = [',
+    "+                { operation: 'singleLineChange', regex: regexForSingleLineChange, handler: parseSingleLineChangesToLineNumbers },",
+    "+                { operation: 'justLinesAdded', regex: regexForJustLinesAdded, handler: parseJustLinesAddedToLineNumbers }",
+    '+            ]',
+    '+            for (const { operation, regex, handler } of regexs) {',
+    '+                if (header.match(regex)) {',
+    '+                    const lineChanges = handler(header.matchAll(regex))',
+    '+                    console.log(lineChanges)',
+    '+                    return { operation, lineChanges, header, lines }',
+    '+                }',
+    '+            }',
+    "+            throw new Error('header did not match any known operation types')",
+    '+        }',
+    '+        const [header, indexInfo, fromFile, toFile, ...rawHunks] = diff',
+    '+        const diffLineRegex = /^@@[^@]*@@/g',
+    '+        const hunks = []',
+    '+        let currentHunk = []',
+    '+        for (const line of rawHunks) {',
+    '+            if (diffLineRegex.test(line)) {',
+    '+                hunks.push(currentHunk)',
+    '+                currentHunk = []',
+    '+            }',
+    '+            currentHunk.push(line)',
+    '+        }',
+    '+        hunks.push(currentHunk)',
+    '+        console.log(hunks)',
+    '+        return { header, indexInfo, fromFile, toFile, hunks: hunks.slice(1).map(formatHunk) }',
+    '+    }',
+    '+',
+    '+    return diffs.slice(1).map(formatFileDiff)',
+    '+}',
+    '+',
+    '+export { getChangedFiles, getChangedFilesWithDiff }',
+    '\\ No newline at end of file'
+  ]
+]
+[
+  11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+  23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+  35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46,
+  47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58,
+  59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70,
+  71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82,
+  83, 84
+]
+[
+  [],
+  [
+    '@@ -1,2 +0,0 @@',
+    '-# The getFastDocsLinks Method',
+    '-[getFastDocLinks](./fast-docs-lib.mjs)'
+  ],
+  [
+    '@@ -6,0 +5,9 @@ You need to use findDownAll and not findDown, otherwise you only get the first r',
+    '+``` javascript @fastdoc ./fast-docs-lib.mjs:21-26',
+    '+async function getFastDocItems() {',
+    "+    const markdowns = await findDownAll('.md')",
+    '+',
+    '+    const fastDocLinks = []',
+    '+    const fastDocCodeBlocks = []',
+    '+    for (const file of markdowns) {',
+    '+```',
+    '+'
+  ]
+]

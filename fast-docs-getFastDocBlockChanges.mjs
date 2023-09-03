@@ -4,21 +4,12 @@ import childProcess from 'node:child_process'
 import path from 'path'
 const exec = util.promisify(childProcess.exec);
 import { getFastDocItems } from './lib/fast-docs-lib.mjs'
-const tempFastDocFolder = "./.fast-docs"
+const tempFastDocMap = {}
 
 
 export async function getAllChanges() {
-    try {
-        if (!fs.existsSync(tempFastDocFolder)) {
-            fs.mkdirSync(tempFastDocFolder);
-        }
-    } catch (err) {
-        console.error(err);
-    }
 
     const { fastDocCodeBlocks } = await getFastDocItems()
-
-    fs.writeFileSync(`${tempFastDocFolder}/.fastDocCodeBlocks.json`, JSON.stringify(fastDocCodeBlocks, null, 2))
 
     //consolidate codeBlocks for the same source file
     const fastDocCodeBlocksBySource = {}
@@ -39,30 +30,34 @@ export async function getAllChanges() {
             const previousLines = markdownLines.slice(0, codeBlock.fastDocLineNumber)
             //the next lines should be the lines after the codeBlock
             const endOfCodeBlockRegex = /```/gi
-            let endOfMarkdownCodeBlock = codeBlock.fastDocLineNumber
-            let numberOfDeletedLines = 0
             const markdownCodeBlock = []
             for (let i = codeBlock.fastDocLineNumber; i < markdownLines.length; i++) {
                 if (endOfCodeBlockRegex.test(markdownLines[i])) {
-                    endOfMarkdownCodeBlock = i
                     break
                 } else {
                     markdownCodeBlock.push(markdownLines[i])
-                    numberOfDeletedLines++
                 }
             }
 
-            fs.writeFileSync(`${tempFastDocFolder}/${codeBlock.fastDocFile.replace(/\//g, '-')}`, codeBlockLines.join("\n"))
-            fs.writeFileSync(`${tempFastDocFolder}/${codeBlock.sourceMarkdown.replace(/\//g, '-')}`, markdownCodeBlock.join("\n"))
+
+            tempFastDocMap[`${codeBlock.fastDocFile.replace(/\//g, '-')}:${codeBlock.fastDocLineNumber}`] = codeBlockLines.join("\n")
+            tempFastDocMap[`${codeBlock.sourceMarkdown.replace(/\//g, '-')}:${codeBlock.fastDocStartLine}`] = markdownCodeBlock.join("\n")
+
         }
     }
 
+    function markdownAndCodeAreTheSame(markdown, code) {
+        if (markdown === code) {
+            return true
+        }
+        return false
+    }
 
     const filesWithErrors = []
     for (const codeBlock of fastDocCodeBlocks) {
-        const { stdout, stderr } = await exec(`comm -23 ${tempFastDocFolder}/${codeBlock.fastDocFile.replace(/\//g, '-')} ${tempFastDocFolder}/${codeBlock.sourceMarkdown.replace(/\//g, '-')}`)
-        const lines = stdout.split("\n")
-        if (stdout !== "") {
+        const code = tempFastDocMap[`${codeBlock.fastDocFile.replace(/\//g, '-')}:${codeBlock.fastDocLineNumber}` ]
+        const markdown = tempFastDocMap[`${codeBlock.sourceMarkdown.replace(/\//g, '-')}:${codeBlock.fastDocStartLine}`]
+        if (!markdownAndCodeAreTheSame(markdown, code)) {
             filesWithErrors.push(`${codeBlock.sourceMarkdown}:${codeBlock.fastDocLineNumber} - ${codeBlock.fastDocFile}:${codeBlock.fastDocStartLine}`)
         }
     }

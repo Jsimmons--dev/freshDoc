@@ -33,6 +33,17 @@
     "fastDocEndLine": 19
   },
   {
+    "sourceMarkdown": "/Users/josh/fast-doc/fast-docs-getFastDocBlockChanges.md",
+    "language": "javascript",
+    "fastDocLine": "``` javascript @fastdoc ./fast-docs-getFastDocBlockChanges.mjs:13-13",
+    "fastDocLineNumber": 5,
+    "numberOfLinesInDocBlock": 1,
+    "fastDocMarker": "@fastdoc",
+    "fastDocFile": "/Users/josh/fast-doc/fast-docs-getFastDocBlockChanges.mjs",
+    "fastDocStartLine": 13,
+    "fastDocEndLine": 13
+  },
+  {
     "sourceMarkdown": "/Users/josh/fast-doc/lib/fast-docs-lib.md",
     "language": "javascript",
     "fastDocLine": "``` javascript @fastdoc ./fast-docs-lib.mjs:20-27",

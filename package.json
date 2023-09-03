@@ -1,38 +1,18 @@
 {
-  "name": "fast-doc",
-  "displayName": "fast-doc",
-  "description": "dont let your docs rot",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.81.0"
+  "name": "test-fast-doc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.mjs",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "line-number": "^0.1.0",
+    "parse-md": "^3.0.3",
+    "vfile-find-down": "^7.0.0"
   },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
-  "main": "./extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "fast-doc.helloWorld",
-        "title": "Hello World"
-      }
-    ]
-  },
+  "devDependencies": {},
   "scripts": {
     "test": "node ./test-fast-doc/fast-docs-getFastDocBlockChanges.mjs"
   },
-  "devDependencies": {
-    "@types/vscode": "^1.81.0",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "16.x",
-    "eslint": "^8.47.0",
-    "glob": "^10.3.3",
-    "mocha": "^10.2.0",
-    "typescript": "^5.1.6",
-    "@vscode/test-electron": "^2.3.4"
-  },
-  "dependencies": {
-    "husky": "^8.0.3"
-  }
+  "author": "",
+  "license": "ISC"
 }

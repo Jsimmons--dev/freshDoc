@@ -1,0 +1,6 @@
+async function getaFastDocItems() {
+    const markdownas = await findDownAll('.md')
+a
+    aconst fastDocLinks = []
+    cionst fastDocCodeBlocks = []
+    for (const file of newMarkdown) {

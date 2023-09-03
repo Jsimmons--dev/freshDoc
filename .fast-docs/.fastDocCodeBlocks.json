@@ -1,0 +1,34 @@
+[
+  {
+    "sourceMarkdown": "/Users/josh/fast-doc/test-fast-doc/lib/fast-docs-lib.md",
+    "language": "javascript",
+    "fastDocLine": "``` javascript @fastdoc ./fast-docs-lib.mjs:21-26",
+    "fastDocLineNumber": 5,
+    "numberOfLinesInDocBlock": 6,
+    "fastDocMarker": "@fastdoc",
+    "fastDocFile": "/Users/josh/fast-doc/test-fast-doc/lib/fast-docs-lib.mjs",
+    "fastDocStartLine": 21,
+    "fastDocEndLine": 26
+  },
+  {
+    "sourceMarkdown": "/Users/josh/fast-doc/test-fast-doc/lib/fast-docs-lib.md",
+    "language": "javascript",
+    "fastDocLine": "``` javascript @fastdoc ./fast-docs-lib.mjs:getFastDocItems()",
+    "fastDocLineNumber": 25,
+    "numberOfLinesInDocBlock": null,
+    "fastDocMarker": "@fastdoc",
+    "fastDocFile": "/Users/josh/fast-doc/test-fast-doc/lib/fast-docs-lib.mjs",
+    "fastDocStartLine": null
+  },
+  {
+    "sourceMarkdown": "/Users/josh/fast-doc/test-fast-doc/lib/fast-docs-lib.md",
+    "language": "javascript",
+    "fastDocLine": "``` javascript @fastdoc ./fast-docs-lib.mjs:20-27",
+    "fastDocLineNumber": 34,
+    "numberOfLinesInDocBlock": 8,
+    "fastDocMarker": "@fastdoc",
+    "fastDocFile": "/Users/josh/fast-doc/test-fast-doc/lib/fast-docs-lib.mjs",
+    "fastDocStartLine": 20,
+    "fastDocEndLine": 27
+  }
+]

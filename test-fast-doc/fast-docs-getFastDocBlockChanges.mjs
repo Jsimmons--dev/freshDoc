@@ -61,10 +61,9 @@ for (const codeBlock of fastDocCodeBlocks){
     if(stdout === ""){
         //no differences
         console.log("no differences")
-    } else if(lines.length === codeBlock.numberOfLinesInDocBlock){
-        console.log("all lines are different")
-    } else {
+    } else{
         console.log("some lines are different")
+        throw new Error('stop the presses')
     }
 }
 

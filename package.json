@@ -20,9 +20,7 @@
     ]
   },
   "scripts": {
-    "lint": "eslint .",
-    "pretest": "npm run lint",
-    "test": "node ./test/runTest.js"
+    "test": "node ./test-fast-doc/fast-docs-getFastDocBlockChanges.mjs"
   },
   "devDependencies": {
     "@types/vscode": "^1.81.0",
@@ -33,5 +31,8 @@
     "mocha": "^10.2.0",
     "typescript": "^5.1.6",
     "@vscode/test-electron": "^2.3.4"
+  },
+  "dependencies": {
+    "husky": "^8.0.3"
   }
 }

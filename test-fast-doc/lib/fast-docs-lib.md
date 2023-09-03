@@ -11,6 +11,27 @@ async function getFastDocItems() {
     for (const file of markdowns) {
 ```
 
+--> change happened in file
+
+-- if method still in file, light warning
+    -- changed inside the method
+
+-- if method no longer in file, error
+ -- deleted
+ -- moved
+ -- renamed 
+    
+``` javascript @fastdoc ./fast-docs-lib.mjs:20-27
+
+async function getFastDocItems() {
+    const markdowns = await findDownAll('.md')
+
+    const fastDocLinks = []
+    const fastDocCodeBlocks = []
+    for (const file of markdowns) {
+        const fileContents = fs.readFileSync(file.history[0], 'utf8')
+```
+
 This method will then take every link it can find in the file and strip it out and return it.
 
 For our v1, any link that we found we are considering a fastDoc Link.

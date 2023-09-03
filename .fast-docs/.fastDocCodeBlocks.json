@@ -13,18 +13,8 @@
   {
     "sourceMarkdown": "/Users/josh/fast-doc/test-fast-doc/lib/fast-docs-lib.md",
     "language": "javascript",
-    "fastDocLine": "``` javascript @fastdoc ./fast-docs-lib.mjs:getFastDocItems()",
-    "fastDocLineNumber": 25,
-    "numberOfLinesInDocBlock": null,
-    "fastDocMarker": "@fastdoc",
-    "fastDocFile": "/Users/josh/fast-doc/test-fast-doc/lib/fast-docs-lib.mjs",
-    "fastDocStartLine": null
-  },
-  {
-    "sourceMarkdown": "/Users/josh/fast-doc/test-fast-doc/lib/fast-docs-lib.md",
-    "language": "javascript",
     "fastDocLine": "``` javascript @fastdoc ./fast-docs-lib.mjs:20-27",
-    "fastDocLineNumber": 34,
+    "fastDocLineNumber": 24,
     "numberOfLinesInDocBlock": 8,
     "fastDocMarker": "@fastdoc",
     "fastDocFile": "/Users/josh/fast-doc/test-fast-doc/lib/fast-docs-lib.mjs",

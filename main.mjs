@@ -1,5 +1,5 @@
-import { getAllChanges } from './fast-docs-getFastDocBlockChanges.mjs'
-import { syncAllBlocks } from './fast-docs-syncBlocks.mjs'
+import { getAllChanges } from './getBlockChanges.mjs'
+import { syncAllBlocks } from './syncBlocks.mjs'
 import { program } from 'commander'
 
 program.name("freshDocs")

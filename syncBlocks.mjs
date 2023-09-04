@@ -1,31 +1,35 @@
 import fs from "fs"
-import { getFastDocItems } from './lib/fast-docs-lib.mjs'
+import { getItems } from './lib/freshdoc-lib.mjs'
 
 export async function syncAllBlocks() {
-    const { fastDocCodeBlocks } = await getFastDocItems()
+    const { codeBlocks } = await getItems()
 
     //consolidate codeBlocks for the same source file
-    const fastDocCodeBlocksBySource = {}
-    for (const codeBlock of fastDocCodeBlocks) {
-        if (!fastDocCodeBlocksBySource[codeBlock.sourceMarkdown]) {
-            fastDocCodeBlocksBySource[codeBlock.sourceMarkdown] = []
+    const codeBlocksBySource = {}
+    for (const codeBlock of codeBlocks) {
+        if (!codeBlocksBySource[codeBlock.sourceMarkdown]) {
+            codeBlocksBySource[codeBlock.sourceMarkdown] = []
         }
-        fastDocCodeBlocksBySource[codeBlock.sourceMarkdown].push(codeBlock)
+        codeBlocksBySource[codeBlock.sourceMarkdown].push(codeBlock)
     }
 
-    for (const codeBlockList of Object.values(fastDocCodeBlocksBySource).sort((a, b) => a[0].fastDocLineNumber - b[0].fastDocLineNumber)) {
+    for (const codeBlockList of Object.values(codeBlocksBySource).sort((a, b) => a[0].fastDocLineNumber - b[0].fastDocLineNumber)) {
         const markdownFileContents = fs.readFileSync(codeBlockList[0].sourceMarkdown, 'utf8')
         let markdownLines = markdownFileContents.split("\n")
         for (const codeBlock of codeBlockList) {
-            const fileContents = fs.readFileSync(codeBlock.fastDocFile, 'utf8')
+            const { sourceMarkdown, referencedCodeFilename,
+                codeBlockRangeStart, codeBlockRangeEnd, markdownFreshDocReferenceLineNumber,
+            } = codeBlock
+
+            const fileContents = fs.readFileSync(referencedCodeFilename, 'utf8')
             const lines = fileContents.split("\n")
-            const codeBlockLines = lines.slice(codeBlock.fastDocStartLine - 1, codeBlock.fastDocEndLine)
-            const previousLines = markdownLines.slice(0, codeBlock.fastDocLineNumber)
+            const codeBlockLines = lines.slice(codeBlockRangeStart - 1, codeBlockRangeEnd)
+            const previousLines = markdownLines.slice(0, markdownFreshDocReferenceLineNumber)
             //the next lines should be the lines after the codeBlock
             const endOfCodeBlockRegex = /```/gi
-            let endOfMarkdownCodeBlock = codeBlock.fastDocLineNumber
+            let endOfMarkdownCodeBlock = markdownFreshDocReferenceLineNumber
             let numberOfDeletedLines = 0
-            for (let i = codeBlock.fastDocLineNumber; i < markdownLines.length; i++) {
+            for (let i = markdownFreshDocReferenceLineNumber; i < markdownLines.length; i++) {
                 if (endOfCodeBlockRegex.test(markdownLines[i])) {
                     endOfMarkdownCodeBlock = i
                     break
@@ -41,7 +45,7 @@ export async function syncAllBlocks() {
             for (const futureCodeBlock of codeBlockList) {
                 futureCodeBlock.fastDocLineNumber += codeBlockLines.length - numberOfDeletedLines
             }
-            fs.writeFileSync(codeBlock.sourceMarkdown, markdownLines.join("\n"))
+            fs.writeFileSync(sourceMarkdown, markdownLines.join("\n"))
         }
     }
 }

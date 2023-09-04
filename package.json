@@ -1,6 +1,6 @@
 {
-  "name": "test-fast-doc",
-  "version": "1.0.0",
+  "name": "freshdoc",
+  "version": "0.1.0",
   "description": "",
   "main": "main.mjs",
   "dependencies": {
@@ -11,7 +11,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "node ./test-fast-doc/fast-docs-getFastDocBlockChanges.mjs"
+    "test": "node ./getBlockChanges.mjs"
   },
   "author": "",
   "license": "ISC"

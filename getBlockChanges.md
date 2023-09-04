@@ -2,15 +2,15 @@ This function will find all freshDoc references in your markdown and figure out 
 block has changed. This file does not handle updating the markdown.
 
 This uses the core library to find all code blocks
-``` javascript @fastdoc ./fast-docs-getFastDocBlockChanges.mjs:12-12
-    const { fastDocCodeBlocks } = await getFastDocItems()
+``` javascript @freshdoc ./getBlockChanges.mjs:20-20
+    const { codeBlocks } = await getItems()
 ```
 
 
 
 ### Giving Helpful output
 Giving helpful output for the changes command is currently done at the end of this file.
-``` javascript @fastdoc ./fast-docs-getFastDocBlockChanges.mjs:65-73
+``` javascript @freshdoc ./getBlockChanges.mjs:79-87
     if (filesWithErrors.length > 0) {
         console.log()
         console.log("FreshDoc️ found differences between the code and the docs")
@@ -28,13 +28,16 @@ markdownFile.md:3 - code.mjs:34
 ```
 
 These names are gathered from 
-``` javascript @fastdoc ./fast-docs-getFastDocBlockChanges.mjs:56-63
+``` javascript @freshdoc ./getBlockChanges.mjs:67-77
     const filesWithErrors = []
-    for (const codeBlock of fastDocCodeBlocks) {
-        const code = tempFastDocMap[`${codeBlock.fastDocFile.replace(/\//g, '-')}:${codeBlock.fastDocLineNumber}` ]
-        const markdown = tempFastDocMap[`${codeBlock.sourceMarkdown.replace(/\//g, '-')}:${codeBlock.fastDocStartLine}`]
+    for (const codeBlock of codeBlocks) {
+        const { sourceMarkdown, referencedCodeFilename,
+            codeBlockRangeStart, codeBlockRangeEnd, markdownFreshDocReferenceLineNumber,
+        } = codeBlock
+        const code = referenceMap[buildCodeReference(referencedCodeFilename, codeBlockRangeStart)]
+        const markdown = referenceMap[buildMarkdownReference(sourceMarkdown, markdownFreshDocReferenceLineNumber)]
         if (!markdownAndCodeAreTheSame(markdown, code)) {
-            filesWithErrors.push(`${codeBlock.sourceMarkdown}:${codeBlock.fastDocLineNumber} - ${codeBlock.fastDocFile}:${codeBlock.fastDocStartLine}`)
+            filesWithErrors.push(`${sourceMarkdown}:${markdownFreshDocReferenceLineNumber} - ${referencedCodeFilename}:${codeBlockRangeStart}`)
         }
     }
 ```

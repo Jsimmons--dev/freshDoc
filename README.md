@@ -1,4 +1,5 @@
 ``` javascript @freshdoc ./main.mjs:5-5
+//main.mjs:5-5
 program.name("freshDocs")
 ```
 
@@ -9,7 +10,8 @@ If your files get out of sync and you need to review them first. For example, if
 
 Example FreshDoc reference
 ````
-``` javascript @freshdoc ./Readme.md:10-10
+``` javascript @freshdoc ./Readme.md:11-11
+//Readme.md:11-11
 Example FreshDoc reference
 ```
 ````
@@ -23,6 +25,7 @@ A reference is composed of the following:
 # Commands
 ## Changes
 ``` javascript @freshdoc ./main.mjs:14-19
+//main.mjs:14-19
 program
   .command('changes')
   .description('Get all changes')
@@ -36,6 +39,7 @@ More details on the 'changes' command can be found [here](./getBlockChanges.md)
 ## Sync
 Syncing changes to blocks 
 ``` javascript @freshdoc ./main.mjs:7-12
+//main.mjs:7-12
 program
   .command('sync' )
   .description('Sync all blocks')

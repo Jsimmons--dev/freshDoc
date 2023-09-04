@@ -43,7 +43,8 @@ export async function getAllChanges() {
             //the next lines should be the lines after the codeBlock
             const endOfCodeBlockRegex = /```/gi
             const markdownCodeBlock = []
-            for (let i = markdownFreshDocReferenceLineNumber; i < markdownLines.length; i++) {
+            //account for the commented reference to the location by adding 1
+            for (let i = markdownFreshDocReferenceLineNumber + 1; i < markdownLines.length; i++) {
                 if (endOfCodeBlockRegex.test(markdownLines[i])) {
                     break
                 } else {

@@ -1,4 +1,5 @@
 import fs from "fs"
+import path from "path"
 import { getItems } from './lib/freshdoc-lib.mjs'
 
 export async function syncAllBlocks() {
@@ -16,7 +17,7 @@ export async function syncAllBlocks() {
     for (const codeBlockList of Object.values(codeBlocksBySource).sort((a, b) => a[0].fastDocLineNumber - b[0].fastDocLineNumber)) {
         const markdownFileContents = fs.readFileSync(codeBlockList[0].sourceMarkdown, 'utf8')
         let markdownLines = markdownFileContents.split("\n")
-        for (const codeBlock of codeBlockList) {
+        for (const [i, codeBlock] of codeBlockList.entries()) {
             const { sourceMarkdown, referencedCodeFilename,
                 codeBlockRangeStart, codeBlockRangeEnd, markdownFreshDocReferenceLineNumber,
             } = codeBlock
@@ -40,10 +41,13 @@ export async function syncAllBlocks() {
 
             const nextLines = markdownLines.slice(endOfMarkdownCodeBlock)
 
-            markdownLines = [...previousLines, ...codeBlockLines, ...nextLines]
+            markdownLines = [...previousLines,
+                 `//${path.relative(process.env.PWD, referencedCodeFilename)}:${codeBlockRangeStart}-${codeBlockRangeEnd}`,
+                 ...codeBlockLines,
+                  ...nextLines]
             //update future codeBlocks in the list to properly offset by added lines
-            for (const futureCodeBlock of codeBlockList) {
-                futureCodeBlock.fastDocLineNumber += codeBlockLines.length - numberOfDeletedLines
+            for (const futureCodeBlock of codeBlockList.slice(i)) {
+                futureCodeBlock.markdownFreshDocReferenceLineNumber += codeBlockLines.length - numberOfDeletedLines + 1 // for the reference!
             }
             fs.writeFileSync(sourceMarkdown, markdownLines.join("\n"))
         }

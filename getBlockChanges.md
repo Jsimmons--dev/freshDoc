@@ -3,6 +3,7 @@ block has changed. This file does not handle updating the markdown.
 
 This uses the core library to find all code blocks
 ``` javascript @freshdoc ./getBlockChanges.mjs:20-20
+//getBlockChanges.mjs:20-20
     const { codeBlocks } = await getItems()
 ```
 
@@ -10,7 +11,8 @@ This uses the core library to find all code blocks
 
 ### Giving Helpful output
 Giving helpful output for the changes command is currently done at the end of this file.
-``` javascript @freshdoc ./getBlockChanges.mjs:79-87
+``` javascript @freshdoc ./getBlockChanges.mjs:80-88
+//getBlockChanges.mjs:80-88
     if (filesWithErrors.length > 0) {
         console.log()
         console.log("FreshDoc️ found differences between the code and the docs")
@@ -28,7 +30,8 @@ markdownFile.md:3 - code.mjs:34
 ```
 
 These names are gathered from 
-``` javascript @freshdoc ./getBlockChanges.mjs:67-77
+``` javascript @freshdoc ./getBlockChanges.mjs:68-78
+//getBlockChanges.mjs:68-78
     const filesWithErrors = []
     for (const codeBlock of codeBlocks) {
         const { sourceMarkdown, referencedCodeFilename,

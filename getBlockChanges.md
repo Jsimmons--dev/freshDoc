@@ -2,7 +2,7 @@ This function will find all freshDoc references in your markdown and figure out 
 block has changed. This file does not handle updating the markdown.
 
 This uses the core library to find all code blocks
-``` javascript @freshdoc ./getBlockChanges.mjs:20-20
+```javascript @freshdoc ./getBlockChanges.mjs:16-16
 //getBlockChanges.mjs:20-20
     const { codeBlocks } = await getItems()
 ```
@@ -11,7 +11,7 @@ This uses the core library to find all code blocks
 
 ### Giving Helpful output
 Giving helpful output for the changes command is currently done at the end of this file.
-``` javascript @freshdoc ./getBlockChanges.mjs:80-88
+```javascript @freshdoc ./getBlockChanges.mjs:76-84
 //getBlockChanges.mjs:80-88
     if (filesWithErrors.length > 0) {
         console.log()
@@ -30,7 +30,7 @@ markdownFile.md:3 - code.mjs:34
 ```
 
 These names are gathered from 
-``` javascript @freshdoc ./getBlockChanges.mjs:68-78
+```javascript @freshdoc ./getBlockChanges.mjs:64-74
 //getBlockChanges.mjs:68-78
     const filesWithErrors = []
     for (const codeBlock of codeBlocks) {

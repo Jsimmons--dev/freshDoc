@@ -1,8 +1,4 @@
 import fs from "fs"
-import util from 'node:util'
-import childProcess from 'node:child_process'
-import path from 'path'
-const exec = util.promisify(childProcess.exec);
 import { getItems } from './lib/freshdoc-lib.mjs'
 const referenceMap = {}
 

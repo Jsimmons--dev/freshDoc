@@ -9,7 +9,9 @@
     "parse-md": "^3.0.3",
     "vfile-find-down": "^7.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "prettier": "^3.0.3"
+  },
   "scripts": {
     "test": "node ./getBlockChanges.mjs"
   },

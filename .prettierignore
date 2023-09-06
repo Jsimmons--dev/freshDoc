@@ -1,0 +1,3 @@
+# Ignore md for now since it messes with our tool
+**/*.md
+

@@ -1,21 +1,21 @@
-import { getAllChanges } from './getBlockChanges.mjs'
-import { syncAllBlocks } from './syncBlocks.mjs'
-import { program } from 'commander'
+import { getAllChanges } from "./getBlockChanges.mjs";
+import { syncAllBlocks } from "./syncBlocks.mjs";
+import { program } from "commander";
 
-program.name("freshDocs")
-
-program
-  .command('sync' )
-  .description('Sync all blocks')
-  .action(() => {
-    syncAllBlocks()
-  })
+program.name("freshDocs");
 
 program
-  .command('changes')
-  .description('Get all changes')
+  .command("sync")
+  .description("Sync all blocks")
   .action(() => {
-    getAllChanges()
-  })
+    syncAllBlocks();
+  });
+
+program
+  .command("changes")
+  .description("Get all changes")
+  .action(() => {
+    getAllChanges();
+  });
 
 program.parse();

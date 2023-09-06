@@ -69,13 +69,13 @@ export async function getAllChanges() {
         const code = referenceMap[buildCodeReference(referencedCodeFilename, codeBlockRangeStart)]
         const markdown = referenceMap[buildMarkdownReference(sourceMarkdown, markdownFreshDocReferenceLineNumber)]
         if (!markdownAndCodeAreTheSame(markdown, code)) {
-            filesWithErrors.push(`${sourceMarkdown}:${markdownFreshDocReferenceLineNumber} - ${referencedCodeFilename}:${codeBlockRangeStart}`)
+            filesWithErrors.push(`${sourceMarkdown}:${markdownFreshDocReferenceLineNumber} != ${referencedCodeFilename}:${codeBlockRangeStart}`)
         }
     }
 
     if (filesWithErrors.length > 0) {
         console.log()
-        console.log("FreshDoc️ found differences between the code and the docs")
+        console.log("FreshDoc️ found differences the Docs and the Code")
         for (const file of filesWithErrors) {
             console.log(file)
         }

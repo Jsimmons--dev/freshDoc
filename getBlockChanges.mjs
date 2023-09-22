@@ -1,14 +1,14 @@
 import fs from "fs";
-import { getItems } from "./lib/freshdoc-lib.mjs";
+import { getItemsForFile } from "./lib/freshdoc-lib.mjs";
 const referenceMap = {};
 
 function buildMarkdownReference(
   sourceMarkdown,
-  markdownFreshDocReferenceLineNumber,
+  markdownFreshDocReferenceLineNumber
 ) {
   return `${sourceMarkdown.replace(
     /\//g,
-    "-",
+    "-"
   )}:${markdownFreshDocReferenceLineNumber}`;
 }
 
@@ -16,8 +16,8 @@ function buildCodeReference(referencedCodeFilename, codeBlockRangeStart) {
   return `${referencedCodeFilename.replace(/\//g, "-")}:${codeBlockRangeStart}`;
 }
 
-export async function getAllChanges() {
-  const { codeBlocks } = await getItems();
+export async function getAllChanges(filePath) {
+  const { codeBlocks } = await getItemsForFile(filePath);
 
   //consolidate codeBlocks for the same source file
   const codeBlocksBySource = {};
@@ -30,11 +30,11 @@ export async function getAllChanges() {
   }
 
   for (const codeBlockList of Object.values(codeBlocksBySource).sort(
-    (a, b) => a[0].fastDocLineNumber - b[0].fastDocLineNumber,
+    (a, b) => a[0].fastDocLineNumber - b[0].fastDocLineNumber
   )) {
     const markdownFileContents = fs.readFileSync(
       codeBlockList[0].sourceMarkdown,
-      "utf8",
+      "utf8"
     );
     let markdownLines = markdownFileContents.split("\n");
     for (const codeBlock of codeBlockList) {
@@ -49,11 +49,11 @@ export async function getAllChanges() {
       const lines = fileContents.split("\n");
       const codeBlockLines = lines.slice(
         codeBlockRangeStart - 1,
-        codeBlockRangeEnd,
+        codeBlockRangeEnd
       );
       const previousLines = markdownLines.slice(
         0,
-        markdownFreshDocReferenceLineNumber,
+        markdownFreshDocReferenceLineNumber
       );
       //the next lines should be the lines after the codeBlock
       const endOfCodeBlockRegex = /```/gi;
@@ -77,7 +77,7 @@ export async function getAllChanges() {
       referenceMap[
         buildMarkdownReference(
           sourceMarkdown,
-          markdownFreshDocReferenceLineNumber,
+          markdownFreshDocReferenceLineNumber
         )
       ] = markdownCodeBlock.join("\n");
     }
@@ -107,12 +107,12 @@ export async function getAllChanges() {
       referenceMap[
         buildMarkdownReference(
           sourceMarkdown,
-          markdownFreshDocReferenceLineNumber,
+          markdownFreshDocReferenceLineNumber
         )
       ];
     if (!markdownAndCodeAreTheSame(markdown, code)) {
       filesWithErrors.push(
-        `${sourceMarkdown}:${markdownFreshDocReferenceLineNumber} != ${referencedCodeFilename}:${codeBlockRangeStart}`,
+        `${sourceMarkdown}:${markdownFreshDocReferenceLineNumber} != ${referencedCodeFilename}:${codeBlockRangeStart}`
       );
     }
   }

@@ -1,6 +1,6 @@
 ``` javascript @freshdoc ./main.mjs:5-5
 //main.mjs:5-5
-program.name("freshDocs")
+program.name("freshDocs");
 ```
 
 # The Way That It Works
@@ -27,11 +27,11 @@ A reference is composed of the following:
 ``` javascript @freshdoc ./main.mjs:14-19
 //main.mjs:14-19
 program
-  .command('changes')
-  .description('Get all changes')
-  .action(() => {
-    getAllChanges()
-  })
+  .command("changes [file]")
+  .description("Get all changes")
+  .action((file) => {
+    getAllChanges(file);
+  });
 ```
 
 More details on the 'changes' command can be found [here](./getBlockChanges.md)
@@ -41,11 +41,11 @@ Syncing changes to blocks
 ``` javascript @freshdoc ./main.mjs:7-12
 //main.mjs:7-12
 program
-  .command('sync' )
-  .description('Sync all blocks')
-  .action(() => {
-    syncAllBlocks()
-  })
+  .command("sync [file]")
+  .description("Sync all blocks")
+  .action((file) => {
+    syncAllBlocks(file);
+  });
 ```
 
 More details on the 'sync' command can be found [here](./syncBlocks.md)

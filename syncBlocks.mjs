@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
-import { getItems } from "./lib/freshdoc-lib.mjs";
+import { getItemsForFile } from "./lib/freshdoc-lib.mjs";
 
-export async function syncAllBlocks() {
-  const { codeBlocks } = await getItems();
+export async function syncAllBlocks(file) {
+  const { codeBlocks } = await getItemsForFile(file);
 
   //consolidate codeBlocks for the same source file
   const codeBlocksBySource = {};
@@ -15,11 +15,11 @@ export async function syncAllBlocks() {
   }
 
   for (const codeBlockList of Object.values(codeBlocksBySource).sort(
-    (a, b) => a[0].fastDocLineNumber - b[0].fastDocLineNumber,
+    (a, b) => a[0].fastDocLineNumber - b[0].fastDocLineNumber
   )) {
     const markdownFileContents = fs.readFileSync(
       codeBlockList[0].sourceMarkdown,
-      "utf8",
+      "utf8"
     );
     let markdownLines = markdownFileContents.split("\n");
     for (const [i, codeBlock] of codeBlockList.entries()) {
@@ -35,11 +35,11 @@ export async function syncAllBlocks() {
       const lines = fileContents.split("\n");
       const codeBlockLines = lines.slice(
         codeBlockRangeStart - 1,
-        codeBlockRangeEnd,
+        codeBlockRangeEnd
       );
       const previousLines = markdownLines.slice(
         0,
-        markdownFreshDocReferenceLineNumber,
+        markdownFreshDocReferenceLineNumber
       );
       //the next lines should be the lines after the codeBlock
       const endOfCodeBlockRegex = /```/gi;
@@ -64,7 +64,7 @@ export async function syncAllBlocks() {
         ...previousLines,
         `//${path.relative(
           process.env.PWD,
-          referencedCodeFilename,
+          referencedCodeFilename
         )}:${codeBlockRangeStart}-${codeBlockRangeEnd}`,
         ...codeBlockLines,
         ...nextLines,

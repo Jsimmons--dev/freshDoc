@@ -5,17 +5,17 @@ import { program } from "commander";
 program.name("freshDocs");
 
 program
-  .command("sync")
+  .command("sync [file]")
   .description("Sync all blocks")
-  .action(() => {
-    syncAllBlocks();
+  .action((file) => {
+    syncAllBlocks(file);
   });
 
 program
-  .command("changes")
+  .command("changes [file]")
   .description("Get all changes")
-  .action(() => {
-    getAllChanges();
+  .action((file) => {
+    getAllChanges(file);
   });
 
 program.parse();
